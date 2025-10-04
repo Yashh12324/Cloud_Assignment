@@ -1,0 +1,46 @@
+name: Churn Prediction MLOps Pipeline
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with: { python-version: '3.9' }
+    - run: pip install pytest pandas scikit-learn
+    - run: pytest tests/
+  train:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
+      with: { creds: ${{ secrets.AZURE_CREDENTIALS }} }
+    - run: az ml job create --file train-job.yml --resource-group rg-datatek-churn --workspace-name mlw-datatek-churn
+  deploy-to-staging:
+    needs: train
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: azure/login@v1
+      with: { creds: ${{ secrets.AZURE_CREDENTIALS }} }
+    - name: Get latest model
+      id: get_model
+      run: |
+        MODEL_VERSION=$(az ml model list --name "churn-prediction-training" --query "[0].version" -o tsv --resource-group rg-datatek-churn --workspace-name mlw-datatek-churn)
+        echo "MODEL_URI=azureml:churn-prediction-training:$MODEL_VERSION" >> $GITHUB_ENV
+    - name: Deploy model to staging
+      run: |
+        az ml online-deployment create --file staging-deployment.yml --set model=${{ env.MODEL_URI }} --all-traffic --resource-group rg-datatek-churn --workspace-name mlw-datatek-churn
+  deploy-to-production:
+    needs: deploy-to-staging
+    environment: name: production
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Manual Approval"
+      run: echo "Deployment to production approved."
