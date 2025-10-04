@@ -64,7 +64,7 @@ def main(args):
     print("Best params:", grid.best_params_)
     print("Validation metrics:", metrics)
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, required=True, help="Path to the training data CSV")
     args = parser.parse_args()
