@@ -8,7 +8,7 @@ dependencies:
   - pandas=1.5.3
   - pip
   - pip:
-    - azureml-mlflow==1.49.0
+    - mlflow==2.9.2
     - fsspec
     - adlfs
     - azureml-fsspec
