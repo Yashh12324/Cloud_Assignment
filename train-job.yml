@@ -5,12 +5,12 @@ command: >-
 code: .
 inputs:
   training_data:
-      type: mltable
-      path: azureml:churn-training-data:1
-      mode: direct
+    type: mltable
+    path: azureml:churn-training-data:1
+    mode: direct
 environment:
   image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
   conda_file: ./environment.yml
-compute: azureml:cpu-cluster-1 # Use the name of your compute cluster
+compute: azureml:cpu-cluster-1
 display_name: churn-training-job
 experiment_name: churn-prediction-training
