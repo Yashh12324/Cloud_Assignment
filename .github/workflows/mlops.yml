@@ -13,7 +13,7 @@ jobs:
       with:
         python-version: '3.9'
     - name: Install dependencies
-      run: pip install pytest pandas scikit-learn
+      run: pip install pytest pandas scikit-learn mlflow
     - name: Set up PYTHONPATH
       run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
     - name: Run pytest
