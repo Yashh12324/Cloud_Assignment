@@ -9,6 +9,7 @@ dependencies:
   - pip
   - pip:
     - mlflow==2.9.2
+    - azureml-mlflow # <-- Add this line back
     - fsspec
     - adlfs
     - azureml-fsspec
