@@ -1,0 +1,12 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: staging
+endpoint_name: churn-endpoint-prod
+model: azureml:churn-prediction-training:1 # Placeholder
+code_configuration:
+  code: .
+  scoring_script: score.py
+environment:
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
+  conda_file: ./environment.yml
+instance_type: Standard_F2s_v2
+instance_count: 1
