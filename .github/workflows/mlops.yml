@@ -13,7 +13,7 @@ jobs:
       with:
         python-version: '3.9'
     - run: pip install pytest pandas scikit-learn
-    - run: pytest tests/
+    - run: pytest
 
   train:
     needs: test
