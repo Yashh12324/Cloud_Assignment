@@ -41,11 +41,11 @@ jobs:
     - name: Get latest model
       id: get_model
       run: |
-        MODEL_VERSION=$(az ml model list --name "churn-prediction-training" --query "[0].version" -o tsv --resource-group rg-datatek-churn --workspace-name mlw-datatek-churn)
+        MODEL_VERSION=$(az ml model list --name "churn-prediction-training" --query "[0].version" -o tsv --resource-group Cloud_4_10 --workspace-name Cloud_assignment)
         echo "MODEL_URI=azureml:churn-prediction-training:$MODEL_VERSION" >> $GITHUB_ENV
     - name: Deploy model to staging
       run: |
-        az ml online-deployment create --file staging-deployment.yml --set model=${{ env.MODEL_URI }} --all-traffic --resource-group rg-datatek-churn --workspace-name mlw-datatek-churn
+        az ml online-deployment create --file staging-deployment.yml --set model=${{ env.MODEL_URI }} --all-traffic --resource-group Cloud_4_10 --workspace-name Cloud_assignment
 
   deploy-to-production:
     needs: deploy-to-staging
