@@ -5,8 +5,9 @@ command: >-
 code: .
 inputs:
   training_data:
-    type: uri_file
-    path: azureml:churn-training-data:1 # Use the name and version of your data asset
+      type: mltable
+      path: azureml:churn-training-data:1
+      mode: direct
 environment:
   image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
   conda_file: ./environment.yml
