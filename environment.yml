@@ -12,3 +12,4 @@ dependencies:
     - azureml-mlflow==1.49.0
     - fsspec
     - adlfs
+    - azureml-fsspec
