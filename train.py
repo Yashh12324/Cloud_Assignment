@@ -57,7 +57,10 @@ def main(args):
     X, y = prepare_xy(df)
     X_train, X_val, y_train, y_val = train_val_split(X, y)
     pipeline = build_pipeline()
-    param_grid = { 'classifier_n_estimators': [50, 100], 'classifier_max_depth': [None, 10] }
+    param_grid = {
+    'classifier__n_estimators': [50, 100],
+    'classifier__max_depth': [None, 10],
+}
     grid = GridSearchCV(pipeline, param_grid, cv=3, scoring='f1', n_jobs=-1)
     grid.fit(X_train, y_train)
     best = grid.best_estimator_
