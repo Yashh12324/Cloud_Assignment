@@ -1,0 +1,3 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
+name: churn-endpoint-prod # A globally unique name
+auth_mode: key
