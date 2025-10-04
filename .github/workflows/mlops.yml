@@ -28,7 +28,7 @@ jobs:
     - uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - run: az ml job create --file train-job.yml --resource-group rg-datatek-churn --workspace-name mlw-datatek-churn
+    - run: az ml job create --file train-job.yml --resource-group Cloud_4_10 --workspace-name Cloud_assignment
 
   deploy-to-staging:
     needs: train
