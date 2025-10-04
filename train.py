@@ -50,23 +50,46 @@ def evaluate_model(model, X_val, y_val):
     }
     return metrics
 
-# --- Main Execution ---
+# --- Paste this new main function into your train.py ---
+
 def main(args):
-    mlflow.autolog(log_models=True, exclusive=True)
-    df = load_data(args.data_path)
-    X, y = prepare_xy(df)
-    X_train, X_val, y_train, y_val = train_val_split(X, y)
-    pipeline = build_pipeline()
-    param_grid = {
-    'classifier__n_estimators': [50, 100],
-    'classifier__max_depth': [None, 10],
-}
-    grid = GridSearchCV(pipeline, param_grid, cv=3, scoring='f1', n_jobs=-1)
-    grid.fit(X_train, y_train)
-    best = grid.best_estimator_
-    metrics = evaluate_model(best, X_val, y_val)
-    print("Best params:", grid.best_params_)
-    print("Validation metrics:", metrics)
+    # Start a manual MLflow run
+    with mlflow.start_run() as run:
+        print("MLflow Run ID:", run.info.run_id)
+
+        df = load_data(args.data_path)
+        X, y = prepare_xy(df)
+        X_train, X_val, y_train, y_val = train_val_split(X, y)
+
+        pipeline = build_pipeline()
+
+        param_grid = {
+            'classifier__n_estimators': [50, 100],
+            'classifier__max_depth': [None, 10],
+        }
+        grid = GridSearchCV(pipeline, param_grid, cv=3, scoring='f1', n_jobs=-1)
+        grid.fit(X_train, y_train)
+
+        best = grid.best_estimator_
+        metrics = evaluate_model(best, X_val, y_val)
+
+        # --- Manual MLflow Logging ---
+        print("Logging parameters...")
+        # Log the best parameters found by GridSearchCV
+        mlflow.log_params(grid.best_params_)
+
+        print("Logging metrics...")
+        # Log the evaluation metrics
+        mlflow.log_metrics(metrics)
+
+        print("Registering the model...")
+        # This is the crucial step: log and register the model explicitly
+        mlflow.sklearn.log_model(
+            sk_model=best,
+            artifact_path="model",
+            registered_model_name="churn-prediction-training" # This guarantees the correct name
+        )
+        print("Model registered successfully.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
