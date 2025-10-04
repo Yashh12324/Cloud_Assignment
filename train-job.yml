@@ -6,7 +6,7 @@ code: .
 inputs:
   training_data:
     type: mltable
-    path: azureml:churn-training-data:1
+    path: azureml://subscriptions/ac58d39e-10ad-40b4-b10e-ce9dbb1efc8d/resourcegroups/Cloud_4_10/workspaces/Cloud_assignment/datastores/workspaceblobstore/paths/UI/2025-10-04_072843_UTC/
     mode: direct
 environment:
   image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04
