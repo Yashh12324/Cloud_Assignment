@@ -19,8 +19,9 @@ def load_data(path: str):
 
 def prepare_xy(df):
     df = df.copy()
-    if 'CustomerID' in df.columns:
-        df = df.drop(columns=['CustomerID'])
+    # Add this line to drop rows where 'Churn' is missing
+    df.dropna(subset=['Churn'], inplace=True)
+    if 'CustomerID' in df.columns: df = df.drop(columns=['CustomerID'])
     y = df['Churn']
     X = df.drop(columns=['Churn'])
     return X, y
